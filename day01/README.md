@@ -13,3 +13,8 @@ Haskell because it is very early in the morning.
 
 Also, hey, it's 26 lines! Surely expensive things are worth it if they're also pretty,
 right (?).
+
+### Addendum
+
+Found the way to do the thing, added a more efficient solution. It's not as pretty in my
+opinion, but it *is* faster.
