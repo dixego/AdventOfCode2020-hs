@@ -3,7 +3,7 @@ Oof.
 Part 1 of the puzzle I solved relatively quickly: with some help from the `split` package,
 accumulate all sections of the input separated by blank lines (representing all data from
 a single passport), then split each field by spaces, then split the keys and values by a
-colon delimiter, then count which passwords have all required keys. I think in total the
+colon delimiter, then count which passports have all required keys. I think in total the
 solution was about 30 lines.
 
 Then I got to part 2.
