@@ -1,6 +1,6 @@
 A mathematical puzzle, neat!
 
-To be fair, I could only tell part 2 could be solved via the Chinese Residue Theorem by
+To be fair, I could only tell part 2 could be solved via the Chinese Reminder Theorem by
 writing down what finding the solution would mean:
 
 _So if at time `t` the bus with ID 7 arrives, then at time `t+1` arrives bus 13, then at
