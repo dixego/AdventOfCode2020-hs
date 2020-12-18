@@ -6,16 +6,15 @@ import qualified Data.Map as Map
 data Point3D = Point3D (Int,Int,Int) deriving (Eq, Ord, Show)
 data Point4D = Point4D (Int,Int,Int,Int) deriving (Eq, Ord, Show)
 
-parseGrid :: Ord a => [[(a, Char)]] -> Set a
-parseGrid = Set.fromList . map fst . filter ((=='#').snd) . concat
+parseGrid :: Ord a => (Int -> Int -> a) -> [String] -> Set a
+parseGrid f = Set.fromList . map fst . filter ((=='#').snd) . concat
+              . zipWith (\n l -> zipWith (\m c -> (f n m, c)) [0..] l) [0..]
 
 parseGrid3D :: [String] -> Set Point3D
-parseGrid3D = parseGrid 
-              . zipWith (\n l -> zipWith (\m c -> (Point3D (n,m,0),c)) [0..] l) [0..]
+parseGrid3D = parseGrid (\n m -> Point3D (n,m,0))
 
 parseGrid4D :: [String] -> Set Point4D
-parseGrid4D = parseGrid
-              . zipWith (\n l -> zipWith (\m c -> (Point4D (n,m,0,0),c)) [0..] l) [0..]
+parseGrid4D = parseGrid (\n m -> Point4D (n,m,0,0))
 
 -- generate all neighbors to a point (by adding or substracting 1 from each
 -- coord or leaving it alone)
