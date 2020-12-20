@@ -11,13 +11,13 @@ data Rule = Match Char | Choice [[Int]] deriving Show
 type RuleSet = IntMap Rule
 
 rule :: Parser (Int, Rule)
-rule = try ruleMatch <|> ruleChoice
-  where ruleMatch = (,) <$> numberColon <*> (Match <$> (between (char '"') (char '"') letter))
-        ruleChoice = (,) <$> numberColon <*> ((Choice . filter (not.null) . (\(x,y) -> [x,y])) <$> listPair)
-        listPair = (,) <$> (numberList ) <*> (option [] (char '|' *> space *> numberList))
-        numberColon = (number <* char ':' <* spaces)
-        number = read <$> (many1 digit)
-        numberList = (number `sepEndBy` space)
+rule = (,) <$> numberColon <*> (pMatch <|> pChoice)
+  where pMatch      = Match <$> between (char '"') (char '"') letter
+        pChoice     = (Choice . filter (not.null) . (\(x,y) -> [x,y])) <$> listPair
+        listPair    = (,) <$> numberList <*> option [] (char '|' *> space *> numberList)
+        numberColon = number <* char ':' <* spaces
+        number      = read <$> many1 digit
+        numberList  = number `sepEndBy` space
 
 parseRuleSet :: [String] -> RuleSet
 parseRuleSet = Map.fromList . rights . map (parse rule "")
@@ -30,7 +30,7 @@ match rs = any null . match' (rs!0)
           | otherwise = []
         match' (Choice rss) xs = parsed
           where rules = map (map (rs!)) rss
-                parsed = concat $ map (foldl (\strs rule -> concat $ map (match' rule) strs) [xs]) rules
+                parsed = concatMap (foldl (\strs rule -> concatMap (match' rule) strs) [xs]) rules
 
 part1 :: String -> Int
 part1 input = matches
