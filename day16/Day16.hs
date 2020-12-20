@@ -62,16 +62,16 @@ getOrder = concat . until (all ((==1).length)) reducePossibilities
 part1 :: String -> Int
 part1 input = sum allNotValid
   where [rangesS, ticketS, ticketsS] = splitOn "\n\n" input
-        ranges = concat $ map snd $ rights $ map (justParse field) $ lines rangesS
+        ranges = concatMap snd $ rights $ map (justParse field) $ lines rangesS
         tickets = rights $ map (justParse numbers) $ lines ticketsS
-        allNotValid = concat $ map (`notValids` ranges) tickets
+        allNotValid = concatMap (`notValids` ranges) tickets
 
 part2 :: String -> Int
 part2 input = product $ map snd $ filter (("departure"`isPrefixOf`).fst) $ zip colOrder myTicket
   where [rangesS, ticketS, ticketsS] = splitOn "\n\n" input
         
         ranges = rights $ map (justParse field) $ lines rangesS
-        onlyRanges = concat $ map snd $ ranges
+        onlyRanges = concatMap snd $ ranges
 
         fields = Map.fromList ranges
 
