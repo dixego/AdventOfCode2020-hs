@@ -33,8 +33,7 @@ recursiveGame hs g@(a :<| as, b :<| bs)
       case recursiveGame Set.empty (Seq.take a as, Seq.take b bs) of
         Left  _ -> recursiveGame (Set.insert g hs) (as:|>a:|>b, bs)
         Right _ -> recursiveGame (Set.insert g hs) (as, bs:|>b:|>a)
-  | a >= b = recursiveGame (Set.insert g hs) (as:|>a:|>b, bs)
-  | otherwise = recursiveGame (Set.insert g hs) (as, bs:|>b:|>a)
+  | otherwise = recursiveGame (Set.insert g hs) (gameStep g)
 
 score :: Deck -> Int
 score = sum . zipWith (*) [1..] . reverse . toList 
