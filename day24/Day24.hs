@@ -22,14 +22,8 @@ move SW = (+ (V3 (-1) 0 1))
 
 parseLine :: Parser [Direction]
 parseLine = many1 parseDirection
-  where
-    parseDirection = choice $ map try [northEast, southEast, east, southWest, northWest, west]
-    east = E <$ string "e"
-    west = W <$ string "w"
-    northEast = NE <$ string "ne"
-    northWest = NW <$ string "nw"
-    southEast = SE <$ string "se"
-    southWest = SW <$ string "sw"
+  where parseDirection = choice $ map try dirs
+        dirs = zipWith (<$) [E,W,NE,NW,SE,SW] $ map string ["e","w","ne","nw","se","sw"]
 
 parseInput :: String -> [[Direction]]
 parseInput = rights . map (parse parseLine "") . lines
@@ -41,10 +35,7 @@ freqs :: (Foldable f, Ord a) => f a -> Map a Int
 freqs = Map.fromListWith (+) . flip zip (repeat 1) . toList
 
 neighbors :: Coord -> Set Coord
-neighbors c = Set.fromList $ map (c+) ns
-  where ns = [V3 1 (-1) 0, V3 (-1) 1 0,
-              V3 1 0 (-1), V3 (-1) 0 1,
-              V3 0 1 (-1), V3 0 (-1) 1]
+neighbors c = Set.fromList $ map (flip move c) [E, W, NE, NW, SE, SW]
 
 neighborCount :: Set Coord -> Map Coord Int
 neighborCount tiles = Map.unionsWith (+) ns
